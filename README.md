@@ -52,7 +52,7 @@ NGINX Docker image with automatic configuration file creation and export
 * Automatic configuration, creates configuration files using the supported environment variables 
   unless they already exist at /configurations directory. These are well-commented configuration files
   that you can edit according to your needs and make them persistent by mounting /configurations directory 
-  to a location on host. If you need to re-create them using the environment variables, then you need to 
+  to a location on host. If you need to re-create them using the environment variables, then you must 
   delete the old ones. This is all by design.
   
 * There is a working Docker Compose example project which you can see vkucukcakar/nginx image in action: [lemp-stack-compose](https://github.com/vkucukcakar/lemp-stack-compose )

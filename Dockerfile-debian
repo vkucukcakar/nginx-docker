@@ -21,38 +21,37 @@
 # This copyright notice and license must be retained in all files and derivative works.
 ###
 
-FROM nginx:1.12.1
+FROM nginx:1.12.2
 
 LABEL maintainer "Volkan Kucukcakar"
 
-ENV NGINX_V 1.12.1
+ENV NGINX_V 1.12.2
 ENV NAXSI_V 0.55.3
 
 EXPOSE 80 443
 
 VOLUME [ "/configurations" ]
 
-
 # Delete default nginx /conf.d/default.conf configuration file
 RUN rm /etc/nginx/conf.d/default.conf
 
+# Build dynamic modules for nginx
 
-### Build dynamic modules for nginx ###
-
-# Install build tools and wget
 RUN apt-get update -q && apt-get install -y \
+        # Install build tools and wget
         libpcre3-dev \
         build-essential \
         libssl-dev \
         zlib1g-dev \
-        wget
+        wget \
 
-# Download nginx source to build dynamic modules
-RUN wget https://nginx.org/download/nginx-${NGINX_V}.tar.gz \
-    && tar -xzvf nginx-${NGINX_V}.tar.gz
+    # Download nginx source to build dynamic modules
+    && wget https://nginx.org/download/nginx-${NGINX_V}.tar.gz \
+    && tar -xzvf nginx-${NGINX_V}.tar.gz \
 
-# Download and build naxsi dynamic module for nginx
-RUN wget https://github.com/nbs-system/naxsi/archive/${NAXSI_V}.tar.gz \
+    # Download and build naxsi dynamic module for nginx
+    # Note: --with-compat here is required even on community version (tested on 1.11) as it seems to be fixing "nginx: [emerg] module "/etc/nginx/modules/ngx_http_naxsi_module.so" is not binary compatible" error.
+    && wget https://github.com/nbs-system/naxsi/archive/${NAXSI_V}.tar.gz \
     && tar -xzvf ${NAXSI_V}.tar.gz \
     && cd nginx-${NGINX_V} \
     && ./configure --with-compat --add-dynamic-module=../naxsi-${NAXSI_V}/naxsi_src \
@@ -61,27 +60,26 @@ RUN wget https://github.com/nbs-system/naxsi/archive/${NAXSI_V}.tar.gz \
     && mkdir /etc/nginx/naxsi \
     && cp -rf ../naxsi-${NAXSI_V}/naxsi_config/* /etc/nginx/naxsi/ \
     && cd .. \
-    && rm -r ${NAXSI_V}.tar.gz  naxsi-${NAXSI_V}
-# Note: --with-compat here is required even on community version (tested on 1.11) as it seems to be fixing "nginx: [emerg] module "/etc/nginx/modules/ngx_http_naxsi_module.so" is not binary compatible" error.
+    && rm -r ${NAXSI_V}.tar.gz  naxsi-${NAXSI_V} \
 
-# Download and build other dynamic modules here...
+    # Download and build other dynamic modules here...
 
-# Remove nginx source
-RUN rm -r nginx-${NGINX_V}  nginx-${NGINX_V}.tar.gz
+    # Remove nginx source
+    && rm -r nginx-${NGINX_V}  nginx-${NGINX_V}.tar.gz \
 
-# Remove build tools
-RUN apt-get purge --auto-remove -y build-essential
-
-# Download naxsi-rules, community provided rules for Wordpress, Drupal, etc...
-RUN wget --no-check-certificate https://github.com/nbs-system/naxsi-rules/archive/master.tar.gz \
+    # Download naxsi-rules, community provided rules for Wordpress, Drupal, etc...
+    && wget --no-check-certificate https://github.com/nbs-system/naxsi-rules/archive/master.tar.gz \
     && tar -xzvf master.tar.gz \
     && mv -f naxsi-rules-master /etc/nginx/naxsi-rules \
-    && rm -r master.tar.gz
+    && rm -r master.tar.gz \
 
-# Note: gettext-base (for envsubst command) already installed on base image
+    # Remove unnecessary packages
+    && apt-get purge --auto-remove -y build-essential \
 
-# Clean up the apt cache
-RUN rm -rf /var/lib/apt/lists/*
+    # Note: gettext-base (for envsubst command) already installed on base image
+
+    # Clean up the apt cache
+    && rm -rf /var/lib/apt/lists/*
 
 # Make ssl directory, common
 RUN mkdir /etc/nginx/ssl
@@ -96,7 +94,7 @@ RUN mkdir -p /var/www/html
 
 # Disable default configuration files of the parent image
 RUN mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-#RUN mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak; exit 0
+    #&& mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak; exit 0
 
 # Copy template configuration files
 COPY templates /templates

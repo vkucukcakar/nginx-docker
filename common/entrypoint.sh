@@ -153,6 +153,9 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			# Create self signed ssl certificate for default server
 			if [ "$CERT_CREATE_default_server" == "enable" ]; then
 				if [ ! -f /configurations/default_server.crt ] || [ ! -f /etc/nginx/ssl/default_server.key ]; then
+					[[ $CERT_COUNTRY_default_server ]] || CERT_COUNTRY_default_server="US"
+					[[ $CERT_STATE_default_server ]] || CERT_STATE_default_server="ExampleState"
+					[[ $CERT_LOCALITY_default_server ]] || CERT_LOCALITY_default_server="ExampleLocality"
 					echo "Creating self signed certificates for default_server"
 					openssl req -new -x509 -days 7300 -nodes \
 						-out /configurations/default_server.crt \
