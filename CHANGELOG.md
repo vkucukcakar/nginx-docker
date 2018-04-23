@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.3
+
+- Updated configuration templates
+
 ## v1.0.2
 
 - Upgraded parent image to Nginx 1.12.2 stable
