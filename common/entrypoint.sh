@@ -131,10 +131,12 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 
 				# Create dhparam (Still may not be enabled)
 				if [ "$DHPARAM_CREATE" == "enable" ]; then
-					echo "Creating dhparam with keysize of ${DHPARAM_KEYSIZE}."
-					[[ $DHPARAM_KEYSIZE ]] || DHPARAM_KEYSIZE="2048"
-					# Create DHE key
-					openssl dhparam -out /configurations/dhparam.pem ${DHPARAM_KEYSIZE}
+					if [ ! -f /configurations/dhparam.pem ]; then
+						echo "Creating dhparam with keysize of ${DHPARAM_KEYSIZE}."
+						[[ $DHPARAM_KEYSIZE ]] || DHPARAM_KEYSIZE="2048"
+						# Create DHE key
+						openssl dhparam -out /configurations/dhparam.pem ${DHPARAM_KEYSIZE}
+					fi
 				else
 					echo "dhparam creation disabled."
 				fi

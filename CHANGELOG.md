@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.4
+
+- Fixed a bug with dhparam creation
+
 ## v1.0.3
 
 - Updated configuration templates
