@@ -9,7 +9,6 @@ NGINX Docker image with automatic configuration file creation and export
 ## Supported tags
 
 * alpine, latest
-* debian
 
 ## Environment variables supported
 
@@ -33,6 +32,8 @@ NGINX Docker image with automatic configuration file creation and export
 	Your example-com container name
 * VHOSTS=["example.com test.tld mydomain.tld"]
 	Virtual hosts separated by space
+* VHOST_example.com=["example.com"]
+	Variables starting with VHOST_ prefix will be added to VHOSTS (Added for flexibility in Compose)
 * CERT_CREATE_example.com=[enable|disable]
 	Enable self signed certificate creation for example.com
 * CERT_COUNTRY_example.com=[XX]
@@ -56,3 +57,11 @@ NGINX Docker image with automatic configuration file creation and export
   delete the old ones. This is all by design.
   
 * There is a working Docker Compose example project which you can see vkucukcakar/nginx image in action: [lemp-stack-compose](https://github.com/vkucukcakar/lemp-stack-compose )
+
+## Notice
+
+Support for Debian based image has reached it's end-of-life.
+Debian related file(s) were moved to "legacy" folder for documentary purposes.
+Sorry, but it's not easy for me to maintain both Alpine and Debian based images.
+
+If you really need the Debian based image, please use previous versions up to v1.0.4.

@@ -51,14 +51,28 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			else
 				echo "Configuration file '/configurations/nginx-default.conf' already exists, skipping file creation. You can edit the file according to your needs."
 			fi
+			
+			# Check if /configurations/nginx-php.conf configuration file already exists/mounted
+			if [ ! -f /configurations/nginx-php.conf ]; then
+				echo "Creating configuration file '/configurations/nginx-php.conf' from template."
+				# Substitute the values of environment variables to create the real configuration file from template
+				envsubst "$SHELL_FORMAT" < /templates/upstream/nginx-php.conf > /configurations/nginx-php.conf
+			else
+				echo "Configuration file '/configurations/nginx-php.conf' already exists, skipping file creation. You can edit the file according to your needs."
+			fi
 		else
 			echo "Error: One or more environment variable required for AUTO_CONFIGURE with upstream as SERVER_ROLE is not set, please check: CONTAINER_NAME, DOMAIN_NAME, PHP_CONTAINER_NAME"
 			exit 1
 		fi
 	elif [ "$SERVER_ROLE" == "proxy" ]; then
 		echo "AUTO_CONFIGURE enabled, starting auto configuration with proxy as SERVER_ROLE."
-		# Check if the required environment variables are set and create configuration files
-		if [ "$CONTAINER_NAME" ] && [ "$VHOSTS" ] && [[ $VHOSTS =~ ^([[:alnum:]\._-]+[[:blank:]]*)+$ ]]; then
+		# Add the values of multiple environment variables with VHOST_ preset to VHOSTS variable
+		_ADD_VHOST=`env | grep VHOST_ | cut -d "=" -f 2`
+		if [ ! -z "${_ADD_VHOST}" ]; then 
+			VHOSTS="${VHOSTS} ${_ADD_VHOST}"
+		fi
+		# Check if the required environment variables are set and create configuration files (Changed [[:blank:]] to [[:space:]] to match new lines come from VHOST_)
+		if [ "$CONTAINER_NAME" ] && [ "$VHOSTS" ] && [[ $VHOSTS =~ ^([[:alnum:]\._-]+[[:space:]]*)+$ ]]; then
 			# Check if /configurations/nginx.conf configuration file already exists/mounted
 			if [ ! -f /configurations/nginx.conf ]; then
 				echo "Creating configuration file '/configurations/nginx.conf' from template."
@@ -179,7 +193,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			fi
 
 		else
-			echo "Error: One or more environment variable required for AUTO_CONFIGURE with proxy as SERVER_ROLE is not set, please check: CONTAINER_NAME, VHOSTS. VHOSTS contains domain names separated by space. (e.g.: 'example.com test.tld anything.tld')"
+			echo "XXX $VHOSTS x1 ${VHOSTS} x2 $_ADD_VHOST x3 ${_ADD_VHOST} Error: One or more environment variable required for AUTO_CONFIGURE with proxy as SERVER_ROLE is not set, please check: CONTAINER_NAME, VHOSTS. VHOSTS contains domain names separated by space. (e.g.: 'example.com test.tld anything.tld')"
 			exit 1
 		fi
 	else
