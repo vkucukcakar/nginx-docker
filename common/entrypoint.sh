@@ -72,7 +72,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			VHOSTS="${VHOSTS} ${_ADD_VHOST}"
 		fi
 		# Check if the required environment variables are set and create configuration files (Changed [[:blank:]] to [[:space:]] to match new lines come from VHOST_)
-		if [ "$CONTAINER_NAME" ] && [ "$VHOSTS" ] && [[ $VHOSTS =~ ^([[:alnum:]\._-]+[[:space:]]*)+$ ]]; then
+		if [ "$CONTAINER_NAME" ] && [ "$VHOSTS" ] && [[ $VHOSTS =~ ^([[:space:]]*[[:alnum:]\._-]+[[:space:]]*)+$ ]]; then
 			# Check if /configurations/nginx.conf configuration file already exists/mounted
 			if [ ! -f /configurations/nginx.conf ]; then
 				echo "Creating configuration file '/configurations/nginx.conf' from template."
@@ -193,7 +193,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			fi
 
 		else
-			echo "XXX $VHOSTS x1 ${VHOSTS} x2 $_ADD_VHOST x3 ${_ADD_VHOST} Error: One or more environment variable required for AUTO_CONFIGURE with proxy as SERVER_ROLE is not set, please check: CONTAINER_NAME, VHOSTS. VHOSTS contains domain names separated by space. (e.g.: 'example.com test.tld anything.tld')"
+			echo "Error: One or more environment variable required for AUTO_CONFIGURE with proxy as SERVER_ROLE is not set, please check: CONTAINER_NAME, VHOSTS. VHOSTS contains domain names separated by space. (e.g.: 'example.com test.tld anything.tld')"
 			exit 1
 		fi
 	else
