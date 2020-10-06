@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.0
+
+- Dockerfile-alpine renamed as Dockerfile
+- alpine tag will not be used on Docker Hub, the image is only Alpine based
+
 ## v1.1.0
 
 - Added http2_push_preload to Nginx automatic configuration file creation templates
