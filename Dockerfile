@@ -25,7 +25,7 @@ FROM nginx:1.18-alpine
 
 LABEL maintainer "Volkan Kucukcakar"
 
-ENV NAXSI_V 0.56
+ENV NAXSI_V 1.1a
 
 EXPOSE 80 443
 
@@ -40,12 +40,12 @@ RUN apk add --update \
         zlib-dev \
         wget \
         openssl \
-
+    #
     # Download nginx source to build dynamic modules
     && NGINX_V=$(nginx -v 2>&1 | grep nginx/ | cut -d "/" -f 2) \
     && wget --no-check-certificate https://nginx.org/download/nginx-${NGINX_V}.tar.gz \
     && tar -xzvf nginx-${NGINX_V}.tar.gz \
-
+    #
     # Download and build naxsi dynamic module for nginx
     # Note: --with-compat here is required even on community version (tested on 1.11) as it seems to be fixing "nginx: [emerg] module "/etc/nginx/modules/ngx_http_naxsi_module.so" is not binary compatible" error.
     && wget --no-check-certificate https://github.com/nbs-system/naxsi/archive/${NAXSI_V}.tar.gz \
@@ -58,21 +58,21 @@ RUN apk add --update \
     && cp -rf ../naxsi-${NAXSI_V}/naxsi_config/* /etc/nginx/naxsi/ \
     && cd .. \
     && rm -r ${NAXSI_V}.tar.gz  naxsi-${NAXSI_V} \
-
+    #
     # Download and build other dynamic modules here...
-
+    #
     # Remove nginx source
     && rm -r nginx-${NGINX_V}  nginx-${NGINX_V}.tar.gz \
-
+    #
     # Download naxsi-rules, community provided rules for Wordpress, Drupal, etc...
     && wget --no-check-certificate https://github.com/nbs-system/naxsi-rules/archive/master.tar.gz \
     && tar -xzvf master.tar.gz \
     && mv -f naxsi-rules-master /etc/nginx/naxsi-rules \
     && rm -r master.tar.gz \
-
+    #
     # Remove unnecessary packages
     && apk del build-base wget \
-
+    #
     # Clean up the apk cache
     && rm -rf /var/cache/apk/*
 

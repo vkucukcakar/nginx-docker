@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.1
+
+- Upgraded Naxsi to 1.1a
+- Fixed empty continuation lines in Dockerfile
+
 ## v1.2.0
 
 - Dockerfile-alpine renamed as Dockerfile
