@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.2
+
+- To increase maximum file upload size, client_max_body_size increased in proxy and upstream configuration file templates
+
 ## v1.2.1
 
 - Upgraded Naxsi to 1.1a
