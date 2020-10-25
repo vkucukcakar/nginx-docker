@@ -1,7 +1,7 @@
 # vkucukcakar/nginx
 
 NGINX Docker image with automatic configuration file creation and export.
-Well-commented configuration files include PHP FastCGI integration, connection & request limits, DDOS protection, admin login protection, WAF and more. 
+Well-commented configuration files include PHP FastCGI integration, connection & request limits, DDOS protection, admin login, brute-force protection, WAF and more. 
 
 * Based on official NGINX Alpine Docker image
 * Automatic configuration creates well-commented configuration files using environment variables or use configuration files at volume "/configurations"
