@@ -8,7 +8,7 @@ Well-commented configuration files include PHP FastCGI integration, connection &
 * Configuration files for "proxy" or "usptream" server roles
 * PHP FastCGI integration implemented. (PHP is not included, only Nginx configuration directives to FastCGI pass included)
 * Connection limits, request limits, Layer 7 DOS / DDOS protection examples implemented in (proxy server) configurations
-* Admin login brute-force protection examples implemented in (upstream server) configurations
+* Admin login, brute-force protection examples implemented in (upstream server) configurations
 * Caching example implemented in (proxy server) configurations
 * NAXSI Web Application Firewall (against XSS & SQL Injection etc.) compiled as module and included
 * Community maintained NAXSI rules for known CMS (WordPress, Drupal, DokuWiki etc.) also included
