@@ -1,10 +1,17 @@
 # vkucukcakar/nginx
 
-NGINX Docker image with automatic configuration file creation and export
+NGINX Docker image with automatic configuration file creation and export.
+Well-commented configuration files include PHP FastCGI integration, connection & request limits, DDOS protection, admin login protection, WAF and more. 
 
-* Based on official NGINX Docker image
+* Based on official NGINX Alpine Docker image
 * Automatic configuration creates well-commented configuration files using environment variables or use configuration files at volume "/configurations"
 * Configuration files for "proxy" or "usptream" server roles
+* PHP FastCGI integration implemented. (PHP is not included, only Nginx configuration directives to FastCGI pass included)
+* Connection limits, request limits, Layer 7 DOS / DDOS protection examples implemented in (proxy server) configurations
+* Admin login brute-force protection examples implemented in (upstream server) configurations
+* Caching example implemented in (proxy server) configurations
+* NAXSI Web Application Firewall (against XSS & SQL Injection etc.) compiled as module and included
+* Community maintained NAXSI rules for known CMS (WordPress, Drupal, DokuWiki etc.) also included
 
 ## Supported tags
 
@@ -47,8 +54,13 @@ NGINX Docker image with automatic configuration file creation and export
 * DHPARAM_CREATE=[enable|disable]
 	Enable dhparam creation (Must be enabled also in /configurations/nginx-example.com.conf) (Should be disabled for development servers since certification creation takes some time)
 * DHPARAM_KEYSIZE=[1024|2048]
-	Dhparam key size (Even it is a one time process. 2048 is safer but creation takes much longer time.)
+	Dhparam key size (Even it is a one time process and 2048 is safer but creation takes much longer time.)
 	
+## Working Example
+
+There is a working Docker Compose example project which you can see vkucukcakar/nginx image in action: [lemp-stack-compose](https://github.com/vkucukcakar/lemp-stack-compose )
+This example includes both proxy and upstream forms of the image.
+
 ## Caveats
 
 * Automatic configuration, creates configuration files using the supported environment variables 
@@ -57,8 +69,6 @@ NGINX Docker image with automatic configuration file creation and export
   to a location on host. If you need to re-create them using the environment variables, then you must 
   delete the old ones. This is all by design.
   
-* There is a working Docker Compose example project which you can see vkucukcakar/nginx image in action: [lemp-stack-compose](https://github.com/vkucukcakar/lemp-stack-compose )
-
 ## Notice
 
 Support for Debian based image has reached it's end-of-life.

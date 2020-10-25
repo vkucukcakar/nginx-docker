@@ -107,6 +107,20 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 					echo "Warning: The file '/etc/nginx/conf.d/nginx-${_UPSTREAM_DOMAIN_NAME}.conf' is not a symbolic link created by AUTO_CONFIGURE. You can delete the file if you want to create symbolic link on next startup."
 				fi
 
+				# Check if /configurations/nginx-location-${_UPSTREAM_DOMAIN_NAME}.conf configuration file already exists/mounted
+				if [ ! -f /configurations/nginx-location-${_UPSTREAM_DOMAIN_NAME}.conf ]; then
+					# Check if /configurations/nginx-${_UPSTREAM_DOMAIN_NAME}.conf configuration file is in the new format
+					if cat /configurations/nginx-${_UPSTREAM_DOMAIN_NAME}.conf | grep "\.well-known/acme-challenge"; then
+						echo "Creating configuration file '/configurations/nginx-location-${_UPSTREAM_DOMAIN_NAME}.conf' from template."
+						# Substitute the values of environment variables to create the real configuration file from template
+						envsubst "$SHELL_FORMAT" < /templates/proxy/nginx-location-example.com.conf > /configurations/nginx-location-${_UPSTREAM_DOMAIN_NAME}.conf
+					else
+						echo "Configuration file '/configurations/nginx-${_UPSTREAM_DOMAIN_NAME}.conf' is in the old format, skipping location block configuration include file creation."
+					fi
+				else
+					echo "Configuration file '/configurations/nginx-location-${_UPSTREAM_DOMAIN_NAME}.conf' already exists, skipping file creation. You can edit the file according to your needs."
+				fi
+
 				# Create self signed server ssl certificates for domains
 				# Get environment variable "CERT_CREATE_example.com"
 				CERT_CREATE=$(awk "BEGIN {print ENVIRON[\"CERT_CREATE_${_UPSTREAM_DOMAIN_NAME}\"]}")
