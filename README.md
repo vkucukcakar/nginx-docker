@@ -1,7 +1,7 @@
 # vkucukcakar/nginx
 
 NGINX Docker image with automatic configuration file creation and export.
-Well-commented configuration files include PHP FastCGI integration, connection & request limits, DDOS protection, admin login, brute-force protection, WAF and more. 
+Well-commented configuration files include PHP FastCGI integration, connection & request limits, DDOS protection, admin login, brute-force protection, WAF and more.
 
 * Based on official NGINX Alpine Docker image
 * Automatic configuration creates well-commented configuration files using environment variables or use configuration files at volume "/configurations"
@@ -22,7 +22,7 @@ Well-commented configuration files include PHP FastCGI integration, connection &
 
 * AUTO_CONFIGURE=[enable|disable]
 	Enable automatic configuration file creation
-	
+
 * SERVER_ROLE=[upstream]*
 	Server Role
 * CONTAINER_NAME=[example-com-web]
@@ -55,7 +55,7 @@ Well-commented configuration files include PHP FastCGI integration, connection &
 	Enable dhparam creation (Must be enabled also in /configurations/nginx-example.com.conf) (Should be disabled for development servers since certification creation takes some time)
 * DHPARAM_KEYSIZE=[1024|2048]
 	Dhparam key size (Even it is a one time process and 2048 is safer but creation takes much longer time.)
-	
+
 ## Working Example
 
 There is a working Docker Compose example project which you can see vkucukcakar/nginx image in action: [lemp-stack-compose](https://github.com/vkucukcakar/lemp-stack-compose )
@@ -63,12 +63,12 @@ This example includes both proxy and upstream forms of the image.
 
 ## Caveats
 
-* Automatic configuration, creates configuration files using the supported environment variables 
+* Automatic configuration, creates configuration files using the supported environment variables
   unless they already exist at /configurations directory. These are well-commented configuration files
-  that you can edit according to your needs and make them persistent by mounting /configurations directory 
-  to a location on host. If you need to re-create them using the environment variables, then you must 
+  that you can edit according to your needs and make them persistent by mounting /configurations directory
+  to a location on host. If you need to re-create them using the environment variables, then you must
   delete the old ones. This is all by design.
-  
+
 ## Notice
 
 Support for Debian based image has reached it's end-of-life.

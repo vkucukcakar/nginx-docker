@@ -51,7 +51,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			else
 				echo "Configuration file '/configurations/nginx-default.conf' already exists, skipping file creation. You can edit the file according to your needs."
 			fi
-			
+
 			# Check if /configurations/nginx-php.conf configuration file already exists/mounted
 			if [ ! -f /configurations/nginx-php.conf ]; then
 				echo "Creating configuration file '/configurations/nginx-php.conf' from template."
@@ -68,7 +68,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 		echo "AUTO_CONFIGURE enabled, starting auto configuration with proxy as SERVER_ROLE."
 		# Add the values of multiple environment variables with VHOST_ preset to VHOSTS variable
 		_ADD_VHOST=`env | grep VHOST_ | cut -d "=" -f 2`
-		if [ ! -z "${_ADD_VHOST}" ]; then 
+		if [ ! -z "${_ADD_VHOST}" ]; then
 			VHOSTS="${VHOSTS} ${_ADD_VHOST}"
 		fi
 		# Check if the required environment variables are set and create configuration files (Changed [[:blank:]] to [[:space:]] to match new lines come from VHOST_)
